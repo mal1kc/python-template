@@ -1,11 +1,17 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
--   repo: https://github.com/ambv/black
-    rev: 23.7.0
+  # Using this mirror lets us use mypyc-compiled black, which is about 2x faster
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 24.4.2
     hooks:
-    - id: black
--   repo: https://github.com/pre-commit/pre-commit-hooks
+      - id : black-jupyter
+        # It is recommended to specify the latest version of Python
+        # supported by your project here, or alternatively use
+        # pre-commit's default_language_version, see
+        # https://pre-commit.com/#top_level-default_language_version
+        language_version: python3.12
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
     -   id: trailing-whitespace
@@ -16,11 +22,18 @@ repos:
     -   id: mixed-line-ending
     -   id: check-toml
     -   id: check-merge-conflict
-- repo: https://github.com/astral-sh/ruff-pre-commit
-  # Ruff version.
-  rev: v0.0.285
-  hooks:
-    - id: ruff
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.5.1
+    hooks:
+      - id: ruff
+      # Run the linter.
+      - id: ruff
+        types_or: [ python, pyi, jupyter ]
+        args: [ --fix ]
+      # Run the formatter.
+      - id: ruff-format
+        types_or: [ python, pyi, jupyter ]
 # - repo: local
 #   hooks:
     # - id: simple-pylint
@@ -46,6 +59,6 @@ repos:
     #   pass_filenames: false
 
 default_language_version:
-  python: python3.11
+  python: python3.12
 
 default_stages: [commit, push]

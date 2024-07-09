@@ -1,4 +1,4 @@
-from template_python import say_hi
+from python_template import say_hi
 
 
 def test_say_hi():
